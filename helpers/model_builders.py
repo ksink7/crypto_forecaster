@@ -35,31 +35,31 @@ def regression_model_build(base, coin, forecast, interval):
             clf = LinearRegression(n_jobs=-1)
             clf.fit(X_train, y_train)
             accuracy = clf.score(X_validate, y_validate)
-            model_name = F"{ticker}_linreg_{forecast_periods}days_{interval}"
+            model_name = F"{ticker}_linreg_{forecast}days_{interval}"
             accuracy_data = [model_name, accuracy]
             accuracy_cache.loc[len(accuracy_cache)] = accuracy_data
-            with open(F'/crypto_forecaster/saved_models/{ticker}-{forecast_periods}-{interval}_linreg.pickle', 'wb') as f:
+            with open(F'/crypto_forecaster/saved_models/{ticker}-{forecast}-{interval}_linreg.pickle', 'wb') as f:
                 pickle.dump(clf, f)
                 # print(
-                #    F"Saved model for {ticker}, forecasting {forecast_periods} days on attempt 3, interval {interval}")
+                #    F"Saved model for {ticker}, forecasting {forecast} days on attempt 3, interval {interval}")
 
         else:
-            model_name = F"{ticker}_linreg_{forecast_periods}days_{interval}"
+            model_name = F"{ticker}_linreg_{forecast}days_{interval}"
             accuracy_data = [model_name, accuracy]
             accuracy_cache.loc[len(accuracy_cache)] = accuracy_data
-            with open(F'/crypto_forecaster/saved_models/{ticker}-{forecast_periods}-{interval}_linreg.pickle', 'wb') as f:
+            with open(F'/crypto_forecaster/saved_models/{ticker}-{forecast}-{interval}_linreg.pickle', 'wb') as f:
                 pickle.dump(clf, f)
                 # print(
-                #    F"Built model for {ticker}, forecasting {forecast_periods} days on attempt 2, interval {interval}")
+                #    F"Built model for {ticker}, forecasting {forecast} days on attempt 2, interval {interval}")
 
     else:
-        model_name = F"{ticker}_linreg_{forecast_periods}days_{interval}"
+        model_name = F"{ticker}_linreg_{forecast}days_{interval}"
         accuracy_data = [model_name, accuracy]
         accuracy_cache.loc[len(accuracy_cache)] = accuracy_data
-        with open(F'/crypto_forecaster/saved_models/{ticker}-{forecast_periods}-{interval}_linreg.pickle', 'wb') as f:
+        with open(F'/crypto_forecaster/saved_models/{ticker}-{forecast}-{interval}_linreg.pickle', 'wb') as f:
             pickle.dump(clf, f)
             # print(
-            #    F"Built model for {ticker}, forecasting {forecast_periods} days on attempt 1, interval {interval}")
+            #    F"Built model for {ticker}, forecasting {forecast} days on attempt 1, interval {interval}")
 
     # print(
         # F"Linear Regression Model Saved: COIN: {coin}, PREDICTION PERIODS: {forecast}, INTERVAL: {interval}")
