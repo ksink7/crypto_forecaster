@@ -4,6 +4,7 @@ import sys
 
 """
 DEFAULT SETTINGS
+Update to accept optional arguments for easier use at commandline
 """
 
 base = sys.argv[1] if len(sys.argv) > 1 else "USDT"
