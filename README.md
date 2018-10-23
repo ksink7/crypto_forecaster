@@ -18,7 +18,7 @@ MAIN FUNCTION DOES THE FOLLOWING IN ORDER:\
 
 Improvements to come in the near future:\
 -requirements.txt file\
--ability to pass arguments from command line\
+-ability to pass arguments from command line (currently only functional for prediction_grapher.py)\
 -Accurate prediction log\
 -Improved graphing options\
 -Application to show graphs and easier see results\
