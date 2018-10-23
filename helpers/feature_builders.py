@@ -8,12 +8,14 @@ from sklearn import preprocessing
 def future_period_prediction_label_feature_builder(file, predict_period):
     base = file[55:59]
     coin = file[60:63]
+    if coin == 'SC_':
+        coin = file[60:62]
+    
     if coin == "SC":
         interval = file[63:-4]
     else:
         interval = file[64:-4]
-    if coin == 'SC_':
-        coin = file[60:62]
+    
 
     """
     LOADS IN DATA FROM THE FILE AND SETS THE INDEX
