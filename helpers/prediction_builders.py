@@ -8,8 +8,8 @@ from sklearn.metrics import mean_squared_error
 
 base = "USDT"
 coin = "XRP"
-forecast = 5
-interval = "oneMin"
+forecast = 4
+interval = "fiveMin"
 
 """
 FUNCION NEEDS TO BE MADE TO BE FED A LIST OF CURRENCIES, COINS
@@ -18,14 +18,13 @@ WITH ALL OF THE PREDICTIONS FOR THAT COIN/INTERVAL WITH THE
 COLUMN NAMES BEING THE MODEL NAME/FORECAST PERIODS FOR THE
 PREDICTED PRICE AT THAT TIMESTAMP
 """
-# NOT FINISHED
 
 
 def prediction_excel_logger(df, base, coin, interval, forecast):
     while True:
         try:
             spreadsheet_load = pd.ExcelFile(
-                '/crypto_forecaster/predictions.xlsx', index=True)
+                '/Users/Kylesink82/desktop/forecaster/predictions.xlsx', index=True)
             sh_df = spreadsheet_load.parse(F"{base}-{coin}")
             sh_df = sh_df.set_index('T', drop=True)
             print(sh_df.head())
@@ -33,52 +32,68 @@ def prediction_excel_logger(df, base, coin, interval, forecast):
 
         except Exception:
 
-            df.to_excel('/crypto_forecaster/predictions.xlsx',
+            df.to_excel('/Users/Kylesink82/desktop/forecaster/predictions.xlsx',
                         sheet_name=F'{base}-{coin}', index=True)
 
             break
 
 
-def prediction_csv_logger(df, base, coin, interval, forecast, model_type):
+def historical_prediction_csv_logger(df, base, coin, interval, forecast, model_type):
     while True:
         try:
             data_load = pd.read_csv(
-                F'/crypto_forecaster/prediction_logs/{base}-{coin}_{interval}.csv')
+                F'/Users/Kylesink82/desktop/forecaster/prediction_logs/{base}-{coin}_{interval}-prediction_log.csv')
             loaded_df = data_load.set_index(data_load['T'])
             loaded_df = loaded_df.drop(["T"], axis=1)
-            loaded_df.index = pd.to_datetime(loaded_df.index)
+            log_end = loaded_df.index[-1]
+            prediction_end = df.index[-1]
 
-            predictions = df
+            if log_end < prediction_end:
+                new_predictions = df[(df.index > loaded_df.index[-1])]
+                if F"{model_type}-{forecast}" not in loaded_df:
+                    loaded_df[F"{model_type}-{forecast}"] = 0
 
-            """
-            correct to just update the csv file instead of overwriting the columns so older predictions can
-            be stored
-            """
-            log = loaded_df
-            #log = log.update(predictions, overwrite=False)
+                updated_log = loaded_df.append(new_predictions, sort=True)
+                updated_log.to_csv(
+                    F'/users/kylesink82/desktop/forecaster/prediction_logs/{base}-{coin}_{interval}-prediction_log.csv')
 
-            log[F'{model_type}-{forecast}'] = predictions[[F'{model_type}-{forecast}']]
-            log.to_csv(
-                F'/crypto_forecaster/prediction_logs/{base}-{coin}_{interval}.csv')
+            else:
+                updated_log = loaded_df.copy()
 
-            #print(F"Updated Minute Data for {base}-{coin}")
+                if F"LR-{forecast}" not in updated_log:
+                    updated_log[F"LR-{forecast}"] = 0
+
+                #print("column average", updated_log[F'LR-{forecast}'].mean())
+                if updated_log[F"LR-{forecast}"].mean() == 0:
+                    updated_log.update(df, overwrite=True)
+                    #print("overwrote all values")
+                else:
+                    updated_log.update(df, overwrite=False)
+                    #print("added new only")
+
+                #print("updated", updated_log.tail())
+                updated_log.to_csv(
+                    F'/users/kylesink82/desktop/forecaster/prediction_logs/{base}-{coin}_{interval}-prediction_log.csv')
+
             break
+
         except OSError:
             pred_df = df
             pred_df.to_csv(
-                F'/crypto_forecaster/prediction_logs/{base}-{coin}_{interval}.csv')
+                F'/users/kylesink82/desktop/forecaster/prediction_logs/{base}-{coin}_{interval}-prediction_log.csv')
             #print(F"Downloaded new Minute data for {coin}")
             break
 
 
 def build_linreg_prediction_log(base, coin, forecast, interval):
     hist_df = historical_price_import(base, coin, interval)
+
     X_train, y_train, X_validate, y_validate, X_backtest, y_backtest, dates = linreg_import_split(
         base, coin, interval, forecast)
     fut_pred, fut_dates = future_features_import(base, coin, interval, forecast)
 
     model_load = open(
-        F"/crypto_forecaster/saved_models/{base}-{coin}-{forecast}-{interval}_linreg.pickle", 'rb')
+        F"/users/kylesink82/desktop/forecaster/saved_models/{base}-{coin}-{forecast}-{interval}_linreg.pickle", 'rb')
     linreg_model = pickle.load(model_load)
 
     MSE = mean_squared_error(y_backtest, linreg_model.predict(X_backtest))
@@ -92,11 +107,14 @@ def build_linreg_prediction_log(base, coin, forecast, interval):
 
     fut_df = pd.DataFrame(index=fut_dates)
     fut_df['model_predictions'] = future_predictions_series.values
+    fut_df.to_csv(
+        F"/users/kylesink82/desktop/forecaster/future_prediction/{base}-{coin}-{interval}-{forecast}.csv")
 
     pred_df = pd.DataFrame(index=dates)
     pred_df['model_predictions'] = prediction_series.values
 
     merged = pd.concat([pred_df, fut_df])
+    #merged = merged.sort_index()
     merged = merged[~merged.index.duplicated(keep='last')]
 
     main_df = pd.DataFrame(index=hist_df.index)
@@ -109,8 +127,8 @@ def build_linreg_prediction_log(base, coin, forecast, interval):
     return MSE, accuracy, main_df
 
 
-#MSE, accuracy, prediction_df = build_linreg_prediction_log(base, coin, forecast, interval)
+MSE, accuracy, prediction_df = build_linreg_prediction_log(base, coin, forecast, interval)
 
 # prediction_df.tail()
 #prediction_excel_logger(prediction_df, base, coin, interval, forecast)
-#prediction_csv_logger(prediction_df, base, coin, interval, forecast)
+#prediction_csv_logger(prediction_df, base, coin, interval, forecast, "LR")
