@@ -15,7 +15,7 @@ FILE DIRECTORIES
 raw_ohlc_files = glob.glob('/crypto_forecaster/database/raw_data/*.csv')
 
 """
-SETTINGS FOR PREDICTION_BUILDER
+SETTINGS FOR PREDICTION_BUILDER, DUPLICATES ARE USED FOR TESTING PURPOSES
 """
 coins_to_build = ['BTC', 'ETH', 'XRP', 'TRX', 'SC', 'LTC', 'BCH', 'ADA', 'XVG', 'ZEC']
 base_currencies = ['USDT']
@@ -28,7 +28,7 @@ forecast_periods = [1, 2, 3, 4, 5, 6, 7, 21, 28]
 
 """
 SETTINGS FOR GRAPH
-** Not yet functional, see prediction_grapher
+**GOING TO SPLIT INTO ITS OWN FILE, SEE PREDICTION GRAPHER
 """
 coins_to_graph = ['XRP']
 graph_base_curr = 'USDT'
@@ -40,7 +40,7 @@ model_types = ["LR"]
 def update_ohlc_database():
     """
     UPDATES ALL INTERVALS FOR THE COINS IN THE ABOVE LIST
-    GETS DATA FROM BITTREX, OTHER EXCHANGES WILL BE ADDED IN THE FUTURE
+    GETS DATA FROM BITTREX, OTHER EXCHANGES WILL BE ADDED IN THE FUTURE AND MODELS WILL BE BUILT OFF OF WEIGHTED AVERAGES
 
     """
     global coins_to_build
@@ -56,7 +56,7 @@ def update_ohlc_database():
 
 def build_features(ohlc_data_files, forecast_periods):
     """
-    -BUILD FEATURES FOR ALL INTERVALS IN THE RAW PRICING FILE IF MAIN
+    -BUILD FEATURES FOR ALL INTERVALS IN THE RAW PRICING FILE 
     CURRENTLY A FEATURE SET CONTAINING A LABEL OF A FUTURE PRICE
          IS BEING USED
     -DIFFERENT BUILDERS CAN BE INPUTED HERE FOR OTHER MODEL TYPES
@@ -76,7 +76,7 @@ def build_features(ohlc_data_files, forecast_periods):
 def build_models():
     """
     BUILDS NEW MODELS
-    -OTHER MODELS CAN BE INPUTED HERE, CURRENTLY ONLY LINEAR REG.
+    -OTHER MODELS CAN BE INPUTED HERE, CURRENTLY ONLY LINEAR REGRESSION
     IS GEING USED FOR FRAMEWORK PURPOSES
     """
     global base_currencies
@@ -97,8 +97,7 @@ def update_prediction_log():
     !!!!!! PREDICTION BUILDER FUNCTION NEEDS FINISHED !!!!!!!!
 
     BUILDS PREDICTION LOGS FOR WHATEVER COINS-INTERVAL ARE PASSED TO IT
-    NEEDS UPDATED TO CORRECTLY BUILD PREDICTION DATABASE, DATE ISSUE CURRENTLY EXISTS
-    NEEDS UPDATED TO ONLY ADD NEW VALUES, AND NOT OVERWRITE EXISTING PREDICTIONS
+    THIS HAS BEEN CORRECTED, MAKING THE FILES CLEANER BEFORE PUSHING THE UPDATES
     """
     global base_currencies
     global coins_to_build
