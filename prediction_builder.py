@@ -130,6 +130,13 @@ def update_prediction_log():
 def main(update_database=True, rebuild_features=True, rebuild_models=True, prediction_logs_update=True):
     print("")
     print("*****************************************")
+    """
+    TEST FOR USING KWARGS INSTEAD OF LISTING ALL THE POSSIBLE PARAMATERS
+    if ('update_database in kwargs):
+        update_database = kwargs['update_database']
+    else:
+        update_database = False
+    """    
     if update_database == True:
         print("-----------------UPDATING DATABASE-----------------")
         update_ohlc_database()
