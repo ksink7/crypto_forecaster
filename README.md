@@ -1,18 +1,18 @@
 # crypto_prediction_builder
 
 ## Builds prediction logs for cryptocurrencies on different intervals/prediction periods
-### -Builds and maintains OHLC data in local folder to be used in model building/predictions
+###   -Builds and maintains OHLC data in local folder to be used in model building/predictions
 
-### MAIN FUNCTION DOES THE FOLLOWING IN ORDER:\
+### MAIN FUNCTION DOES THE FOLLOWING IN ORDER:
   1. Updates Database (CURRENTLY JUST BITTREX DATA, MORE EXCHANGES WILL BE ADDED IN THE FUTURE)\
-  2. Rebuilds Feature Set (CURRENTLY JUST FOR LINEAR REGRESSION, FUNCTIONS NEEDED FOR INPUTS FOR LSTM TRAINING)\
-    2a. THIS IS WHERE YOU PUT THE FEATURES YOU WANT BUILT, THERE ARE ONLY A FEW BASIC EXAMPLES IN THE BUILDER FUNCTIONS\
+  2. Rebuilds Feature Set (CURRENTLY ONLY FEATURES FOR LINEAR REGRESSION, MORE TO COME)\
+    2a. As more ML models are added to section 3, feature set builders need added here\
   3. Rebuilds and saves out models to be used for projections \
     3a. Input other models here (LSTM, SVR..)
   4. Update Prediction Logs (CURRENTLY JUST OUTPUTS TO CSV FILES, MORE EFFICIENT TECHNIQUES TO COME)\
 
 
-### Improvements to come in the near future:\
+### Improvements to come:
 -requirements.txt file\
 -Replace function arguments with correct arg/kwargs syntax\
 -Ability to pass arguments from command line (currently only functional for prediction_grapher.py)\
