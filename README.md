@@ -1,5 +1,6 @@
 # Cryptocurrency Forecaster
-### Maintains a database of historical pricing data, builds out features to be used for ML models, trains those ML models, and logs predictions to csv file.
+### Prediction Builder: Maintains a database of historical pricing data, builds out features to be used for ML models, trains those ML models, and logs predictions to csv file.
+### Predition_grapher: Graphs above predictions against actual close prices.
 
 ## Prediction Builder Main Function does the follwing in order, all default to No
     1. Updates Database (CURRENTLY JUST BITTREX DATA, MORE EXCHANGES WILL BE ADDED IN THE FUTURE)
