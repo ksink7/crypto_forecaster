@@ -30,7 +30,7 @@ pbar_models = ProgressBar(widgets=[Percentage(), Bar(), ETA()])
 pbar_logs = ProgressBar(widgets=[Percentage(), Bar(), ETA()])
 
 
-def argv_method(argv=None):
+def pred_command_line_arguments(argv=None):
     import sys
     if argv is None:
         argv = sys.argv
@@ -189,7 +189,8 @@ def main(**kwargs):
 
 if __name__ == "__main__":
     import sys
-    kwargs = argv_method(sys.argv)
+    kwargs = pred_command_line_arguments(sys.argv)
+
     main(**kwargs)
 
 
