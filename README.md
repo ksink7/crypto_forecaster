@@ -16,6 +16,10 @@
     -L - Update prediction logs\
 
     ***All default to No, can change within the main function in prediction_builder***
+    
+    example command line:
+    crypto_forecaster $ python prediction_builder.py D=Yes F=Yes M=Yes L=Yes
+        -This will rerun all sections of the program from database updating to building the logs
 
 
 ## Arguments to run prediction_grapher from command line:
