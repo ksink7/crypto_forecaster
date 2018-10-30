@@ -5,21 +5,6 @@ from progressbar import ProgressBar, Counter, ETA, Bar, Percentage
 import sys
 
 """
-DEFAULT SETTINGS
-"""
-
-#database_update_setting = sys.argv[1] if len(sys.argv) >= 1 else False
-#feature_update_setting = sys.argv[2] if len(sys.argv) >= 2 else False
-#model_update_setting = sys.argv[3] if len(sys.argv) >= 3 else False
-#prediction_update_setting = sys.argv[4] if len(sys.argv) >= 4 else False
-
-
-"""
-FILE DIRECTORIES
-"""
-raw_ohlc_files = glob.glob('/Users/Kylesink82/desktop/forecaster/database/raw_data/*.csv')
-
-"""
 SETTINGS FOR PREDICTION_BUILDER
 """
 coins_to_build = ['BTC', 'ETH', 'XRP', 'TRX', 'SC', 'LTC', 'BCH', 'ADA', 'XVG', 'ZEC']
@@ -32,19 +17,30 @@ forecast_periods = [1, 2, 3, 4, 5, 6, 7, 21, 28]
 #forecast_periods = [1, 2, 3, 4]
 
 """
-SETTINGS FOR GRAPH
-** Not yet functional, see prediction_grapher
+FILE DIRECTORIES
 """
-coins_to_graph = ['XRP']
-graph_base_curr = 'USDT'
-graph_tick_interval = ['oneMin', 'fiveMin']
-graph_periods = [1, 2, 3, 4]
-model_types = ["LR"]
+raw_ohlc_files = glob.glob('/Users/Kylesink82/desktop/forecaster/database/raw_data/*.csv')
 
+"""
+PROGRESS BARS
+"""
 pbar_database = ProgressBar(widgets=[Percentage(), Bar(), ETA()])
 pbar_features = ProgressBar(widgets=[Percentage(), Bar(), ETA()])
 pbar_models = ProgressBar(widgets=[Percentage(), Bar(), ETA()])
 pbar_logs = ProgressBar(widgets=[Percentage(), Bar(), ETA()])
+
+
+def argv_method(argv=None):
+    import sys
+    if argv is None:
+        argv = sys.argv
+    arg_strs = argv[1:]
+    kwargs = {}
+    for s in arg_strs:
+        if s.count("=") == 1:
+            key, value = s.split("=", 1)
+            kwargs[key] = value
+    return kwargs
 
 
 def update_ohlc_database():
@@ -127,65 +123,77 @@ def update_prediction_log():
     pass
 
 
-def main(update_database=True, rebuild_features=True, rebuild_models=True, prediction_logs_update=True):
-    print("")
-    print("*****************************************")
-    """
-    TEST FOR USING KWARGS INSTEAD OF LISTING ALL THE POSSIBLE PARAMATERS
-    if ('update_database in kwargs):
-        update_database = kwargs['update_database']
-    else:
-        update_database = False
-    """    
-    if update_database == True:
-        print("-----------------UPDATING DATABASE-----------------")
-        update_ohlc_database()
-        print("-----------------COMPLETED-------------------")
-        print()
+def main(**kwargs):
+    print()
+
+    if ('D' in kwargs):
+        update_trigger = kwargs['D']
+        if update_trigger == "Yes":
+            print("-----------------UPDATING DATABASE-----------------")
+            update_ohlc_database()
+            print()
+
+        else:
+            print("-----------------OLD DATA USED--------------------")
+            print()
     else:
         print("-----------------OLD DATA USED--------------------")
         print()
 
-    if rebuild_features == True:
-        print("-----------------BUILDING NEW FEATURES------------")
-        build_features(raw_ohlc_files, forecast_periods)
-        print("-----------------COMPLETED-------------------")
-        print()
+    if ('F' in kwargs):
+        feature_rebuild_trigger = kwargs['F']
+        if feature_rebuild_trigger == "Yes":
+            print("-----------------BUILDING NEW FEATURES------------")
+            build_features(raw_ohlc_files, forecast_periods)
+            print()
+
+        else:
+            print("-----------------OLD FEATURES USED----------------")
+            print()
     else:
         print("-----------------OLD FEATURES USED----------------")
         print()
 
-    if rebuild_models == True:
-        print("-----------------REBUILDING MODELS----------------")
-        build_models()
-        print("-----------------COMPLETED-------------------")
-        print()
+    if ('M' in kwargs):
+        model_rebuild_trigger = kwargs['M']
+        if model_rebuild_trigger == "Yes":
+            print("-----------------REBUILDING MODELS----------------")
+            build_models()
+            print()
+
+        else:
+            print("-----------------OLD MODELS USED------------------")
+            print()
     else:
         print("-----------------OLD MODELS USED------------------")
         print()
 
-    if prediction_logs_update == True:
-        print("-----------------BUILDING PREDICTION LOGS-------")
-        update_prediction_log()
-        print("-----------------COMPLETED-------------------")
-        print()
+    if ('L' in kwargs):
+        pred_log_update_trigger = kwargs['L']
+        if pred_log_update_trigger == "Yes":
+            print("-----------------BUILDING PREDICTION LOGS-------")
+            update_prediction_log()
+            print()
+
+        else:
+            print("--------------PREDICTION LOGS NOT UPDATED----------")
+            print()
     else:
-        print("PREDICTION LOGS NOT UPDATED")
+        print("--------------PREDICTION LOGS NOT UPDATED----------")
         print()
 
-    print("-------PREDICTION BUILDER RAN SUCESSFULLY----------")
+
+# main_test(update_database=True, rebuild_features=True,
+#          rebuild_models=True, prediction_logs_update=True)
+# main(rebuild_features=True)
+
+if __name__ == "__main__":
+    import sys
+    kwargs = argv_method(sys.argv)
+    main(**kwargs)
 
 
 """
-TO BE BUILT AND USED WHENEVER MODELS ARE TAKING LONGER TO RUN
-EVENTUALLY TO BE USED FOR TRADING BOT WHEN DETERMING WHEN TO
-    UPDATE THE INDIVIDUAL MODELS
+Function needs built to rerun all model builds for a particular ticker
+and interval for more timeconsuming models.
 """
-
-
-def single_prediction():
-    pass
-
-
-main(update_database=True, rebuild_features=True,
-     rebuild_models=True, prediction_logs_update=True)
