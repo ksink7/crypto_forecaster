@@ -1,5 +1,5 @@
-## Cryptocurrency Forecaster
-# Maintains a database of historical pricing data, builds out features to be used for ML models, trains those ML models, and logs predictions to csv file.
+# Cryptocurrency Forecaster
+### Maintains a database of historical pricing data, builds out features to be used for ML models, trains those ML models, and logs predictions to csv file.
 
 ## MAIN FUNCTION DOES THE FOLLOWING IN ORDER:\
     1. Updates Database (CURRENTLY JUST BITTREX DATA, MORE EXCHANGES WILL BE ADDED IN THE FUTURE)\
