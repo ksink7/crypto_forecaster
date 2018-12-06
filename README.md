@@ -1,6 +1,6 @@
 # Cryptocurrency Forecaster
 
-##Update Coming soon adding a tikinter application for executing various parts of the forecaster.  Future updates will build in live graphs as well as a backtesting function for custom trading strategies currently working on a reinforcement learning agent and will add into the backtesting function upon completion to be used as a ##potential strategy
+## Update Coming soon adding a tikinter application for executing various parts of the forecaster.  Future updates will build in live graphs as well as a backtesting function for custom trading strategies currently working on a reinforcement learning agent and will add into the backtesting function upon completion to be used as a potential strategy
 
 ### Prediction Builder: Maintains a database of historical pricing data, builds out features to be used for ML models, trains those ML models, and logs predictions to csv file.
 ### Predition_grapher: Graphs above predictions against actual close prices.
