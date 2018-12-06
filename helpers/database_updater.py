@@ -279,8 +279,8 @@ def market_history_download():
 
 
 """
-USE DECORATORS WHEN COMPUTER IS BUILT AND IT CAN RUN 24/7, INSTEAD JUST
-RUN THE PROGRAM EVERY FEW DAYS TO UPDATE THE DATABASE
+Decorators that are commented out can be used if you want the updater to be running 24/7, If not desired just leave as is and
+run the program every few days to keep the database up to date.
 """
 #print("Starting Pricing Data Scheduler")
 # sched.start()
