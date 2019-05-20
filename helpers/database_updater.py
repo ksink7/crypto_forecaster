@@ -9,7 +9,7 @@ from helpers.date_handling import *
 
 #sched = BlockingScheduler()
 """
-coins = ['BTC', 'ETH', 'XRP', 'TRX', 'SC', 'LTC', 'BCH', 'ADA', 'XVG', 'ZEC']
+coins = ['BTC', 'ETH', 'XRP', 'TRX', 'SC', 'LTC', 'BCH', 'ADA', 'XVG', 'ZEC', 'SNTVT']
 
 base = 'USDT'
 coin = 'XRP'
